@@ -55,8 +55,10 @@ possible(Arr,Comb) :-
     combs(Arr,Comb).
 
 combs([],[]).
+
 combs([X|Xs],[X|Xs2]) :-
     combs(Xs,Xs2).
+    
 combs([_|Xs],Xs2) :-
     combs(Xs,Xs2).
 
@@ -70,26 +72,23 @@ move(estado(der,_,_,D,Tt,Tm),[C1],Tt2) :-
     Tt+X =< Tm,
     Tt2 is Tt+X.
 
-move(estado(izq,2,I,_,Tt,Tm),Mov,Tt2) :-
+move(estado(izq,2,I,_,Tt,Tm),[C1,C2],Tt2) :-
     possible(I,[C1,C2]),
     tiempo(C1,X), tiempo(C2,Y),
     max_list([X,Y],Z),
-    Tt+Z =< Tm, Tt2 is Tt+Z,
-    sort([C1,C2],Mov).
+    Tt+Z =< Tm, Tt2 is Tt+Z.
 
-move(estado(izq,3,[I1,I2],_,Tt,Tm),Mov,Tt2) :-
+move(estado(izq,3,[I1,I2],_,Tt,Tm),[I1,I2],Tt2) :-
     tiempo(I1,X), tiempo(I2,Y),
     max_list([X,Y],Z),
-    Tt+Z=<Tm, Tt2 is Tt+Z,
-    sort([I1,I2],Mov).
+    Tt+Z=<Tm, Tt2 is Tt+Z.
 
-move(estado(izq,3,I,_,Tt,Tm),Mov,Tt2) :-
+move(estado(izq,3,I,_,Tt,Tm),[C1,C2,C3],Tt2) :-
     length(I,L), L>2,
     possible(I,[C1,C2,C3]),
     tiempo(C1,W), tiempo(C2,X), tiempo(C3,Y),
     max_list([W,X,Y],Z),
-    Tt+Z =< Tm, Tt2 is Tt+Z,
-    sort([C1,C2,C3],Mov).
+    Tt+Z =< Tm, Tt2 is Tt+Z.
 
 /*
 Hay dos casos de update, uno cuando la linterna está a la izquierda y otro cuando
