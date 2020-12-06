@@ -20,18 +20,17 @@ rasmove(Z) :-
 elmove(X, Y) :- member(X,Y).
 % --------------------------------------------------------------------------
 
-% solveDf(Estado,_,[]) :- finalState(_,Estado).
+solveDf(Estado,_,[]) :- finalState(_,Estado).
 
-% solveDf(Estado,Historia,[Movida|Movidas]) :-
-%     move(Estado,Movida,T),
-%     update(Estado,Movida,T,Estado2),
-%     legal(Estado2),
-%     not(member(Estado2,Historia)),
-%     solveDf(Estado2,[Estado2|Historia],Movidas)
+solveDf(Estado,Historia,[Movida|Movidas]) :-
+    move(Estado,Movida,T),
+    update(Estado,Movida,T,Estado2),
+    not(member(Estado2,Historia)),
+    solveDf(Estado2,[Estado2|Historia],Movidas).
 
-% solveDf(Caso,Movidas) :-
-%     initialState(Caso,Estado),
-%     solveDf(Estado,[Estado],Movidas).
+solveDf(Caso,Movidas) :-
+    initialState(Caso,Estado),
+    solveDf(Estado,[Estado],Movidas).
 
 % Tiempo que le toma a cada persona cruzar el puente
 tiempo(a,1).
@@ -67,7 +66,7 @@ move(estado(der,_,_,D,Tt,Tm),[C1],Tt2) :-
     Tt+X =< Tm,
     Tt2 is Tt+X.
 
-move(estado(izq,2,I,_,Tt,Tm),[C1,C2],Tt2) :-
+move(estado(izq,2,I,_,Tt,Tm),Mov,Tt2) :-
     member(C1,I),
     member(C2,I),
     C1\=C2,
@@ -75,16 +74,18 @@ move(estado(izq,2,I,_,Tt,Tm),[C1,C2],Tt2) :-
     tiempo(C2,Y),
     max_list([X,Y],Z),
     Tt+Z =< Tm,
-    Tt2 is Tt+Z.
+    Tt2 is Tt+Z,
+    sort([C1,C2],Mov).
 
-move(estado(izq,3,[I1,I2],_,Tt,Tm),[I1,I2],Tt2) :-
+move(estado(izq,3,[I1,I2],_,Tt,Tm),Mov,Tt2) :-
     tiempo(I1,X),
     tiempo(I2,Y),
     max_list([X,Y],Z),
     Tt+Z=<Tm,
-    Tt2 is Tt+Z.
+    Tt2 is Tt+Z,
+    sort([I1,I2],Mov).
 
-move(estado(izq,3,I,_,Tt,Tm),[C1,C2,C3],Tt2) :-
+move(estado(izq,3,I,_,Tt,Tm),Mov,Tt2) :-
     length(I,L),
     L>2,
     member(C1,I),
@@ -98,7 +99,8 @@ move(estado(izq,3,I,_,Tt,Tm),[C1,C2,C3],Tt2) :-
     tiempo(C3,Y),
     max_list([W,X,Y],Z),
     Tt+Z =< Tm,
-    Tt2 is Tt+Z.
+    Tt2 is Tt+Z,
+    sort([C1,C2,C3],Mov).
 
 
 update(estado(izq,M,I,D,_,Tm),Mov,Tt2,estado(der,M,I2,D2,Tt2,Tm)) :-
