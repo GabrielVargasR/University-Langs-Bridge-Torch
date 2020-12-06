@@ -61,13 +61,13 @@ finalState(caso4,estado(der,3,[],[a,b,c,d,e,j],30,30)).
 Si la linterna está a la izquierda del puente y solo pueden cruzar dos personas a la vez
 Se usa no-determinismo para generar todas las movidas posibles
 */
-move(estado(der,_,_,D,Tt,Tm),[C1],Tm2) :-
+move(estado(der,_,_,D,Tt,Tm),[C1],Tt2) :-
     member(C1,D),
     tiempo(C1,X),
     Tt+X =< Tm,
-    Tm2 is Tt+X.
+    Tt2 is Tt+X.
 
-move(estado(izq,2,I,_,Tt,Tm),[C1,C2],Tm2) :-
+move(estado(izq,2,I,_,Tt,Tm),[C1,C2],Tt2) :-
     member(C1,I),
     member(C2,I),
     C1\=C2,
@@ -75,16 +75,16 @@ move(estado(izq,2,I,_,Tt,Tm),[C1,C2],Tm2) :-
     tiempo(C2,Y),
     max_list([X,Y],Z),
     Tt+Z =< Tm,
-    Tm2 is Tt+Z.
+    Tt2 is Tt+Z.
 
-move(estado(izq,3,[I1,I2],_,Tt,Tm),[I1,I2],Tm2) :-
+move(estado(izq,3,[I1,I2],_,Tt,Tm),[I1,I2],Tt2) :-
     tiempo(I1,X),
     tiempo(I2,Y),
     max_list([X,Y],Z),
     Tt+Z=<Tm,
-    Tm2 is Tt+Z.
+    Tt2 is Tt+Z.
 
-move(estado(izq,3,I,_,Tt,Tm),[C1,C2,C3],Tm2) :-
+move(estado(izq,3,I,_,Tt,Tm),[C1,C2,C3],Tt2) :-
     length(I,L),
     L>2,
     member(C1,I),
@@ -98,4 +98,17 @@ move(estado(izq,3,I,_,Tt,Tm),[C1,C2,C3],Tm2) :-
     tiempo(C3,Y),
     max_list([W,X,Y],Z),
     Tt+Z =< Tm,
-    Tm2 is Tt+Z.
+    Tt2 is Tt+Z.
+
+
+update(estado(izq,M,I,D,_,Tm),Mov,Tt2,estado(der,M,I2,D2,Tt2,Tm)) :-
+    subtract(I,Mov,I2),
+    append(D,Mov,D2).
+
+update(estado(der,M,I,D,_,Tm),Mov,Tt2,estado(izq,M,I2,D2,Tt2,Tm)) :-
+    append(I,Mov,I2),
+    subtract(D,Mov,D2).
+
+prueba(Estado,Estado2) :-
+    move(Estado,Movida,T),
+    update(Estado,Movida,T,Estado2).
