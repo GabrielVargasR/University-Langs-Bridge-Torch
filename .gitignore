@@ -1,0 +1,10 @@
+## MacOS ##
+.DS_STORE
+
+## Others ##
+depth_first.pl
+best_first.pl
+hill_climbing.pl
+*.pages
+*.doc
+*.docx
