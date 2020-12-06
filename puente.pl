@@ -3,22 +3,8 @@ TP2 2020ii - Problema del puente y la linterna
 Gabriel Vargas Rodríguez- 2018103129
 */
 
-% Se importa lo necesario de los otros archivos
-% :- use_module(depth_first).
-% :- use_module(hill_climbing).
-% :- use_module(best_first).
-
 % Para comodidad a la hora de desarrollar
 clear :- write('\33\[2J').
-
-% --------------------- Para visualizar árbol ------------------------------
-rasmove(Z) :-
-    between(0,Z,X),
-    elmove(A,[1,2]),
-    write(X), write(': '), write(A),nl.
-
-elmove(X, Y) :- member(X,Y).
-% --------------------------------------------------------------------------
 
 solveDf(Estado,_,[]) :- finalState(_,Estado).
 
@@ -67,53 +53,37 @@ move(estado(der,_,_,D,Tt,Tm),[C1],Tt2) :-
     Tt2 is Tt+X.
 
 move(estado(izq,2,I,_,Tt,Tm),Mov,Tt2) :-
-    member(C1,I),
-    member(C2,I),
+    member(C1,I), member(C2,I),
     C1\=C2,
-    tiempo(C1,X),
-    tiempo(C2,Y),
+    tiempo(C1,X), tiempo(C2,Y),
     max_list([X,Y],Z),
-    Tt+Z =< Tm,
-    Tt2 is Tt+Z,
+    Tt+Z =< Tm, Tt2 is Tt+Z,
     sort([C1,C2],Mov).
 
 move(estado(izq,3,[I1,I2],_,Tt,Tm),Mov,Tt2) :-
-    tiempo(I1,X),
-    tiempo(I2,Y),
+    tiempo(I1,X), tiempo(I2,Y),
     max_list([X,Y],Z),
-    Tt+Z=<Tm,
-    Tt2 is Tt+Z,
+    Tt+Z=<Tm, Tt2 is Tt+Z,
     sort([I1,I2],Mov).
 
 move(estado(izq,3,I,_,Tt,Tm),Mov,Tt2) :-
-    length(I,L),
-    L>2,
-    member(C1,I),
-    member(C2,I), 
-    member(C3,I),
-    C1\=C2,
-    C1\=C3,
-    C2\=C3,
-    tiempo(C1,W),
-    tiempo(C2,X),
-    tiempo(C3,Y),
+    length(I,L), L>2,
+    member(C1,I), member(C2,I), member(C3,I),
+    C1\=C2, C1\=C3, C2\=C3,
+    tiempo(C1,W), tiempo(C2,X), tiempo(C3,Y),
     max_list([W,X,Y],Z),
-    Tt+Z =< Tm,
-    Tt2 is Tt+Z,
+    Tt+Z =< Tm, Tt2 is Tt+Z,
     sort([C1,C2,C3],Mov).
-
 
 update(estado(izq,M,I,D,_,Tm),Mov,Tt2,estado(der,M,I2,D2,Tt2,Tm)) :-
     subtract(I,Mov,It),
     append(D,Mov,Dt),
-    sort(It,I2),
-    sort(Dt,D2).
+    sort(It,I2), sort(Dt,D2).
 
 update(estado(der,M,I,D,_,Tm),Mov,Tt2,estado(izq,M,I2,D2,Tt2,Tm)) :-
     append(I,Mov,It),
     subtract(D,Mov,Dt),
-    sort(It,I2),
-    sort(Dt,D2).
+    sort(It,I2), sort(Dt,D2).
 
 prueba(Estado,Estado2) :-
     move(Estado,Movida,T),
