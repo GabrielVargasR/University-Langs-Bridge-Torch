@@ -102,12 +102,16 @@ move(estado(izq,3,I,_,Tt,Tm),[C1,C2,C3],Tt2) :-
 
 
 update(estado(izq,M,I,D,_,Tm),Mov,Tt2,estado(der,M,I2,D2,Tt2,Tm)) :-
-    subtract(I,Mov,I2),
-    append(D,Mov,D2).
+    subtract(I,Mov,It),
+    append(D,Mov,Dt),
+    sort(It,I2),
+    sort(Dt,D2).
 
 update(estado(der,M,I,D,_,Tm),Mov,Tt2,estado(izq,M,I2,D2,Tt2,Tm)) :-
-    append(I,Mov,I2),
-    subtract(D,Mov,D2).
+    append(I,Mov,It),
+    subtract(D,Mov,Dt),
+    sort(It,I2),
+    sort(Dt,D2).
 
 prueba(Estado,Estado2) :-
     move(Estado,Movida,T),
