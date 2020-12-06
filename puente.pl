@@ -6,6 +6,11 @@ Gabriel Vargas Rodríguez- 2018103129
 % Para comodidad a la hora de desarrollar
 clear :- write('\33\[2J').
 
+/*
+Regla principal del programa. solveDf/2 es la principal
+Se indica el caso para el que se quiere obtener una solución,
+Se obtiene o se verifica una solución a dicho caso. 
+*/
 solveDf(Estado,_,[]) :- finalState(_,Estado).
 
 solveDf(Estado,Historia,[Movida|Movidas]) :-
@@ -43,6 +48,19 @@ finalState(caso3,estado(der,2,[],[a,b,c,d,e,j],42,42)).
 finalState(caso4,estado(der,3,[],[a,b,c,d,e,j],30,30)).
 
 /*
+Regla auxiliar a move que obtiene, las posibles combinaciones de un tamaño determinado
+para una lista. Dicho tamaño se logra siendo explícito con Comb
+*/
+possible(Arr,Comb) :-
+    combs(Arr,Comb).
+
+combs([],[]).
+combs([X|Xs],[X|Xs2]) :-
+    combs(Xs,Xs2).
+combs([_|Xs],Xs2) :-
+    combs(Xs,Xs2).
+
+/*
 Si la linterna está a la izquierda del puente y solo pueden cruzar dos personas a la vez
 Se usa no-determinismo para generar todas las movidas posibles
 */
@@ -53,8 +71,7 @@ move(estado(der,_,_,D,Tt,Tm),[C1],Tt2) :-
     Tt2 is Tt+X.
 
 move(estado(izq,2,I,_,Tt,Tm),Mov,Tt2) :-
-    member(C1,I), member(C2,I),
-    C1\=C2,
+    possible(I,[C1,C2]),
     tiempo(C1,X), tiempo(C2,Y),
     max_list([X,Y],Z),
     Tt+Z =< Tm, Tt2 is Tt+Z,
@@ -68,13 +85,16 @@ move(estado(izq,3,[I1,I2],_,Tt,Tm),Mov,Tt2) :-
 
 move(estado(izq,3,I,_,Tt,Tm),Mov,Tt2) :-
     length(I,L), L>2,
-    member(C1,I), member(C2,I), member(C3,I),
-    C1\=C2, C1\=C3, C2\=C3,
+    possible(I,[C1,C2,C3]),
     tiempo(C1,W), tiempo(C2,X), tiempo(C3,Y),
     max_list([W,X,Y],Z),
     Tt+Z =< Tm, Tt2 is Tt+Z,
     sort([C1,C2,C3],Mov).
 
+/*
+Hay dos casos de update, uno cuando la linterna está a la izquierda y otro cuando
+la linterna está a la derecha.
+*/
 update(estado(izq,M,I,D,_,Tm),Mov,Tt2,estado(der,M,I2,D2,Tt2,Tm)) :-
     subtract(I,Mov,It),
     append(D,Mov,Dt),
@@ -84,7 +104,3 @@ update(estado(der,M,I,D,_,Tm),Mov,Tt2,estado(izq,M,I2,D2,Tt2,Tm)) :-
     append(I,Mov,It),
     subtract(D,Mov,Dt),
     sort(It,I2), sort(Dt,D2).
-
-prueba(Estado,Estado2) :-
-    move(Estado,Movida,T),
-    update(Estado,Movida,T,Estado2).
