@@ -58,7 +58,7 @@ combs([],[]).
 
 combs([X|Xs],[X|Xs2]) :-
     combs(Xs,Xs2).
-    
+
 combs([_|Xs],Xs2) :-
     combs(Xs,Xs2).
 
@@ -103,3 +103,8 @@ update(estado(der,M,I,D,_,Tm),Mov,Tt2,estado(izq,M,I2,D2,Tt2,Tm)) :-
     append(I,Mov,It),
     subtract(D,Mov,Dt),
     sort(It,I2), sort(Dt,D2).
+
+hillClimb(Moves) :-
+    initialState(caso1,State),
+    findall([M,T],move(State,M,T),Moves).
+
