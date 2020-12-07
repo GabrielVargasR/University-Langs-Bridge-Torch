@@ -1,3 +1,8 @@
+/*
+TP2 2020ii - Problema del puente y la linterna
+Gabriel Vargas Rodríguez- 2018103129
+*/
+
 :- module(common,[initialState/2,finalState/2,move/3,update/4,clear/0]).
 
 % Para comodidad a la hora de desarrollar
