@@ -3,6 +3,8 @@ TP2 2020ii - Problema del puente y la linterna
 Gabriel Vargas Rodríguez- 2018103129
 */
 
+:- use_module(common).
+
 % Para comodidad a la hora de desarrollar
 clear :- write('\33\[2J').
 
@@ -37,3 +39,9 @@ insertPair((M,V),[(M1,V1)|MVs],[(M,V),(M1,V1)|MVs]) :-
     V >= V1.
 insertPair((M,V),[(M1,V1)|MVs],[(M1,V1)|MVs1]) :-
     V < V1,insertPair((M,V),MVs,MVs1).
+
+value(estado(_,_,I,D,_,_),1). 
+
+% hillClimb(Moves) :-
+%     initialState(caso1,State),
+%     findall([M,T],move(State,M,T),Moves).
