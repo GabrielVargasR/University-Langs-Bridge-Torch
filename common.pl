@@ -1,27 +1,7 @@
-/*
-TP2 2020ii - Problema del puente y la linterna
-Gabriel Vargas Rodríguez- 2018103129
-*/
+:- module(common,[initialState/2,finalState/2,move/3,update/4,clear/0]).
 
 % Para comodidad a la hora de desarrollar
 clear :- write('\33\[2J').
-
-/*
-Regla principal del programa. solveDf/2 es la principal
-Se indica el caso para el que se quiere obtener una solución,
-Se obtiene o se verifica una solución a dicho caso. 
-*/
-solveDf(Estado,_,[]) :- finalState(_,Estado).
-
-solveDf(Estado,Historia,[Movida|Movidas]) :-
-    move(Estado,Movida,T),
-    update(Estado,Movida,T,Estado2),
-    not(member(Estado2,Historia)),
-    solveDf(Estado2,[Estado2|Historia],Movidas).
-
-solveDf(Caso,Movidas) :-
-    initialState(Caso,Estado),
-    solveDf(Estado,[Estado],Movidas).
 
 % Tiempo que le toma a cada persona cruzar el puente
 tiempo(a,1).
@@ -58,7 +38,7 @@ combs([],[]).
 
 combs([X|Xs],[X|Xs2]) :-
     combs(Xs,Xs2).
-    
+
 combs([_|Xs],Xs2) :-
     combs(Xs,Xs2).
 
