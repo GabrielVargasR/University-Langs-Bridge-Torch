@@ -1,4 +1,9 @@
-:- module(common,[initialState/2,finalState/2,move/3,update/4,clear/0]).
+/*
+TP2 2020ii - Problema del puente y la linterna
+Gabriel Vargas Rodríguez- 2018103129
+*/
+
+:- module(common,[initialState/2,finalState/2,move/3,update/4,clear/0,value/3]).
 
 % Para comodidad a la hora de desarrollar
 clear :- write('\33\[2J').
@@ -83,3 +88,28 @@ update(estado(der,M,I,D,_,Tm),Mov,Tt2,estado(izq,M,I2,D2,Tt2,Tm)) :-
     append(I,Mov,It),
     subtract(D,Mov,Dt),
     sort(It,I2), sort(Dt,D2).
+
+/*
+Valores para hill climbing y best first
+*/
+value(estado(der,_,_,_,_,_),1,1).
+value(estado(der,_,_,_,_,_),2,1).
+value(estado(der,_,_,_,_,_),5,1).
+
+value(estado(der,2,_,_,_,_),10,2).
+value(estado(der,2,_,_,_,_),15,3).
+value(estado(der,2,_,_,_,_),20,4).
+
+value(estado(der,3,_,D,_,_),10,4) :- member(c,D).
+value(estado(der,3,_,D,_,_),10,2) :- not(member(c,D)).
+value(estado(der,3,_,D,_,_),15,6) :- member(d,D).
+value(estado(der,3,_,D,_,_),15,3) :- not(member(d,D)).
+value(estado(der,3,_,D,_,_),20,7) :- member(e,D).
+value(estado(der,3,_,D,_,_),20,5) :- not(member(e,D)).
+
+value(estado(izq,_,_,_,_,_),20,0).
+value(estado(izq,_,_,_,_,_),15,0).
+value(estado(izq,_,_,_,_,_),10,0).
+value(estado(izq,_,_,_,_,_),5,1).
+value(estado(izq,_,_,_,_,_),2,2).
+value(estado(izq,_,_,_,_,_),1,3).

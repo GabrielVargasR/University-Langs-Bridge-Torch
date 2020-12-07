@@ -38,25 +38,3 @@ insertPair((M,V),[(M1,V1)|MVs],[(M,V),(M1,V1)|MVs]) :-
     V >= V1.
 insertPair((M,V),[(M1,V1)|MVs],[(M1,V1)|MVs1]) :-
     V < V1,insertPair((M,V),MVs,MVs1).
-
-value(estado(der,_,_,_,_,_),1,1).
-value(estado(der,_,_,_,_,_),2,1).
-value(estado(der,_,_,_,_,_),5,1).
-
-value(estado(der,2,_,_,_,_),10,2).
-value(estado(der,2,_,_,_,_),15,3).
-value(estado(der,2,_,_,_,_),20,4).
-
-value(estado(der,3,_,D,_,_),10,4) :- member(c,D).
-value(estado(der,3,_,D,_,_),10,2) :- not(member(c,D)).
-value(estado(der,3,_,D,_,_),15,6) :- member(d,D).
-value(estado(der,3,_,D,_,_),15,3) :- not(member(d,D)).
-value(estado(der,3,_,D,_,_),20,7) :- member(e,D).
-value(estado(der,3,_,D,_,_),20,5) :- not(member(e,D)).
-
-value(estado(izq,_,_,_,_,_),20,0).
-value(estado(izq,_,_,_,_,_),15,0).
-value(estado(izq,_,_,_,_,_),10,0).
-value(estado(izq,_,_,_,_,_),5,1).
-value(estado(izq,_,_,_,_,_),2,2).
-value(estado(izq,_,_,_,_,_),1,3).
